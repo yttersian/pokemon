@@ -1,64 +1,147 @@
+use crate::constants::{POKEMON_MAX_MOVES, POKEMON_MAX_TYPES};
+use std::default;
+
 use crate::moves::Move;
 use crate::types::PokemonType;
 
-#[derive(Debug, Clone, Copy)]
-pub struct Stats {
-    pub hp: i32,
-    pub attack: i32,
-    pub defense: i32,
-    pub special_attack: i32,
-    pub special_defense: i32,
-    pub speed: i32,
-}
+////////////////////////////////////////////////////////////////////////////////
+// Core Data Structures
+////////////////////////////////////////////////////////////////////////////////
 
 #[derive(Debug)]
+#[non_exhaustive]
 pub enum StatusCondition {
     Paralyzed,
 }
 
 #[derive(Debug)]
+pub struct Stats {
+    pub max_hp: u32,
+    pub attack: u32,
+    pub defense: u32,
+    pub special_attack: u32,
+    pub special_defense: u32,
+    pub speed: u32,
+}
+
+impl Default for Stats {
+    fn default() -> Self {
+        Self {
+            max_hp: 10,
+            attack: 10,
+            defense: 10,
+            special_attack: 10,
+            special_defense: 10,
+            speed: 10,
+        }
+    }
+}
+
+#[derive(Debug)]
 pub struct Pokemon {
     pub name: String,
-    pub pokemon_type: PokemonType,
-    pub stats: Stats,
-    pub level: u8,
-    pub current_hp: i32,
-    pub moves: Vec<Move>,
-    pub status: Option<StatusCondition>,
+    species: String,
+    level: u8,
+    hp: u32,
+    stats: Stats,
+    types: Vec<PokemonType>,
+    moves: Vec<Move>,
+    status: Option<StatusCondition>,
 }
 
 impl Pokemon {
-    pub fn new(name: &str, pokemon_type: PokemonType, stats: Stats, moves: Vec<Move>) -> Self {
-        let pokemon = Self {
-            name: name.to_string(),
-            pokemon_type,
-            stats,
+    pub fn new(species: &str) -> Pokemon {
+        Self::builder(species).build()
+    }
+
+    pub fn builder(species: &str) -> PokemonBuilder {
+        PokemonBuilder {
+            species: species.into(),
             level: 1,
-            current_hp: stats.hp,
-            moves,
-            status: None,
-        };
-
-        println!("{} spawned with {} health", name, pokemon.current_hp);
-
-        pokemon
-    }
-
-    pub fn is_alive(&self) -> bool {
-        self.current_hp > 0
-    }
-
-    pub fn take_damage(&mut self, amount: i32) {
-        if !self.is_alive() {
-            return;
+            stats: Stats::default(),
+            types: vec![PokemonType::default()],
+            moves: Vec::new(),
         }
-        println!("{} took {} damage!", self.name, amount);
-        self.current_hp = (self.current_hp - amount).max(0);
+    }
 
-        if self.is_alive() {
-            println!("{}'s remaining health: {}", self.name, self.current_hp);
-        } else {
-            println!("{} fainted.", self.name);
+    pub fn from_species(name: &str) -> Self {
+        todo!()
+    }
+
+    pub fn level_up(&mut self) {
+        todo!()
+    }
+
+    pub fn is_fainted(&self) -> bool {
+        self.hp == 0
+    }
+
+    pub fn heal(&mut self, amount: u32) {
+        self.hp = (self.hp + amount).min(self.stats.max_hp);
+    }
+
+    pub fn full_heal(&mut self) {
+        self.hp = self.stats.max_hp;
+    }
+
+    pub fn take_damage(&mut self, amount: u32) {
+        self.hp = self.hp.saturating_sub(amount);
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Creation Logic
+////////////////////////////////////////////////////////////////////////////////
+
+#[derive(Debug)]
+pub struct PokemonBuilder {
+    species: String,
+    level: u8,
+    stats: Stats,
+    types: Vec<PokemonType>,
+    moves: Vec<Move>,
+}
+
+impl PokemonBuilder {
+    pub fn level(mut self, level: u8) -> Self {
+        todo!()
+    }
+
+    pub fn stats(mut self, stats: Stats) -> Self {
+        self.stats = stats;
+        self
+    }
+
+    pub fn types(mut self, types: Vec<PokemonType>) -> Self {
+        assert!(
+            types.len() <= POKEMON_MAX_TYPES,
+            "Cannot create a Pokemon with more than {} types.",
+            POKEMON_MAX_TYPES
+        );
+        self.types = types;
+        self
+    }
+
+    pub fn moves(mut self, moves: Vec<Move>) -> Self {
+        assert!(
+            moves.len() <= POKEMON_MAX_MOVES,
+            "Cannot create a Pokemon with more than {} moves.",
+            POKEMON_MAX_MOVES
+        );
+        self.moves = moves;
+        self
+    }
+
+    pub fn build(self) -> Pokemon {
+        Pokemon {
+            name: self.species.clone(),
+            species: self.species,
+            level: self.level,
+            hp: self.stats.max_hp,
+            stats: self.stats,
+            types: self.types,
+            moves: self.moves,
+            status: None,
         }
     }
 }

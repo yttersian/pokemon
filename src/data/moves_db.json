@@ -1,0 +1,23 @@
+{
+    "Tackle": {
+        "type": "Normal",
+        "category": "Physical",
+        "max_pp": 35,
+        "power": 40,
+        "accuracy": 100
+    },
+    "Thunderbolt": {
+        "move_type": "Electric",
+        "max_pp": 15,
+        "power": 90,
+        "accuracy": 100,
+        "category": "Special"
+    },
+    "Vine Whip": {
+        "move_type": "Grass",
+        "category": "Physical",
+        "max_pp": 25,
+        "power": 45,
+        "accuracy": 100
+    }
+}

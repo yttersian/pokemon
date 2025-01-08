@@ -1,22 +1,28 @@
-mod battle;
+#![allow(dead_code, unused)]
+
+// mod battle;
+mod constants;
 mod data;
 mod moves;
 mod pokemon;
+mod trainer;
 mod types;
+mod utils;
 
-use battle::*;
-use data::pokemon::get_pokemon;
+// use battle::*;
+use data::get_pokemon;
+use pokemon::Pokemon;
+use trainer::Trainer;
 
 fn main() {
-    let mut pikachu = get_pokemon("Pikachu");
-    pikachu.level = 10;
+    let mut leaf = Trainer::new("Leaf");
+    let mut red = Trainer::new("Red");
 
-    let mut bulbasaur = get_pokemon("Bulbasaur");
-    bulbasaur.level = 10;
-    // let mut squirtle = get_pokemon("Squirtle");
+    leaf.add_pokemon(get_pokemon("Bulbasaur"));
+    red.add_pokemon(get_pokemon("Pikachu"));
 
-    // fight(&mut pikachu, &mut bulbasaur);
-    fight_with_random_moves(&mut pikachu, &mut bulbasaur);
-    // dbg!(pikachu);
-    // dbg!(bulbasaur);
+    dbg!(leaf);
+    dbg!(red);
+
+    // start_battle(&mut leaf, &mut red);
 }
