@@ -1,4 +1,4 @@
-#![allow(dead_code, unused)]
+// #![allow(dead_code, unused)]
 
 // mod battle;
 mod constants;
@@ -21,8 +21,9 @@ fn main() {
     leaf.add_pokemon(get_pokemon("Bulbasaur"));
     red.add_pokemon(get_pokemon("Pikachu"));
 
-    dbg!(leaf);
-    dbg!(red);
+    println!("{:?}", leaf);
 
-    // start_battle(&mut leaf, &mut red);
+    // let db = data::load_pokemon_db();
+
+    // println!("{db}");
 }

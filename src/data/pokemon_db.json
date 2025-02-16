@@ -10,10 +10,22 @@
         "types": [
             "Grass"
         ],
-        "moves": [
-            "Vine Whip",
-            "Tackle"
-        ],
+        "moves": {
+            "level_up": [
+                {
+                    "level": 1,
+                    "move": "Tackle"
+                },
+                {
+                    "level": 1,
+                    "move": "Growl"
+                },
+                {
+                    "level": 3,
+                    "move": "Vine Whip"
+                }
+            ]
+        },
         "evolves_to": {
             "pokemon": "Ivysaur",
             "level_required": 16

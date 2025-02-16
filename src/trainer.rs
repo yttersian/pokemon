@@ -32,7 +32,7 @@ impl Party {
 
     pub fn add(&mut self, pokemon: Pokemon) -> Result<(), String> {
         if self.is_full() {
-            Err(format!("Team is full! Cannot add {}.", pokemon.name))
+            Err(format!("Team is full! Cannot add {}.", pokemon.name()))
         } else {
             self.members.push(pokemon);
             Ok(())

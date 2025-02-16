@@ -1,5 +1,4 @@
 use crate::constants::{POKEMON_MAX_MOVES, POKEMON_MAX_TYPES};
-use std::default;
 
 use crate::moves::Move;
 use crate::types::PokemonType;
@@ -10,39 +9,23 @@ use crate::types::PokemonType;
 
 #[derive(Debug)]
 #[non_exhaustive]
-pub enum StatusCondition {
-    Paralyzed,
-}
+pub enum StatusCondition {}
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct Stats {
-    pub max_hp: u32,
-    pub attack: u32,
-    pub defense: u32,
-    pub special_attack: u32,
-    pub special_defense: u32,
-    pub speed: u32,
-}
-
-impl Default for Stats {
-    fn default() -> Self {
-        Self {
-            max_hp: 10,
-            attack: 10,
-            defense: 10,
-            special_attack: 10,
-            special_defense: 10,
-            speed: 10,
-        }
-    }
+    pub max_hp: u16,
+    pub attack: u16,
+    pub defense: u16,
+    pub special_attack: u16,
+    pub special_defense: u16,
+    pub speed: u16,
 }
 
 #[derive(Debug)]
 pub struct Pokemon {
-    pub name: String,
     species: String,
     level: u8,
-    hp: u32,
+    hp: u16,
     stats: Stats,
     types: Vec<PokemonType>,
     moves: Vec<Move>,
@@ -50,8 +33,8 @@ pub struct Pokemon {
 }
 
 impl Pokemon {
-    pub fn new(species: &str) -> Pokemon {
-        Self::builder(species).build()
+    pub fn new(species_name: &str) -> Pokemon {
+        Self::builder(species_name).build()
     }
 
     pub fn builder(species: &str) -> PokemonBuilder {
@@ -68,6 +51,10 @@ impl Pokemon {
         todo!()
     }
 
+    pub fn name(&self) -> &str {
+        &self.species
+    }
+
     pub fn level_up(&mut self) {
         todo!()
     }
@@ -76,7 +63,7 @@ impl Pokemon {
         self.hp == 0
     }
 
-    pub fn heal(&mut self, amount: u32) {
+    pub fn heal(&mut self, amount: u16) {
         self.hp = (self.hp + amount).min(self.stats.max_hp);
     }
 
@@ -84,7 +71,7 @@ impl Pokemon {
         self.hp = self.stats.max_hp;
     }
 
-    pub fn take_damage(&mut self, amount: u32) {
+    pub fn take_damage(&mut self, amount: u16) {
         self.hp = self.hp.saturating_sub(amount);
     }
 }
@@ -134,7 +121,6 @@ impl PokemonBuilder {
 
     pub fn build(self) -> Pokemon {
         Pokemon {
-            name: self.species.clone(),
             species: self.species,
             level: self.level,
             hp: self.stats.max_hp,
